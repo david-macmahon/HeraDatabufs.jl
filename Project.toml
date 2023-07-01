@@ -1,0 +1,7 @@
+name = "HeraDatabufs"
+uuid = "ef009080-a24c-4b23-8ca3-274646513aa7"
+authors = ["David MacMahon <davidm@astro.berkeley.edu>"]
+version = "0.0.0"
+
+[deps]
+InterProcessCommunication = "a7427343-1d15-5490-a218-bfcb7db836a2"
