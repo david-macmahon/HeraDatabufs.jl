@@ -56,7 +56,7 @@ end
 ###  HeraCatcherIbvpktBlock
 ###
 
-struct HeraCatcherIbvpktBlock
+struct HeraCatcherIbvpktBlock <: AbstractBlock
     pkts::Vector{HeraCatcherIbvpktPacket}  # fld(block_size, sizeof(HeraCatcherIbvpktPacket))
 end
 
@@ -74,54 +74,4 @@ end
 # Does not account for any unused space at the end of the databuf block!
 function Base.sizeof(h::HeraCatcherIbvpktBlock)
     mapreduce(sizeof, +, h.pkts)
-end
-
-###
-###  HeraCatcherIbvpktDatabuf
-###
-
-struct HeraCatcherIbvpktDatabuf
-    header::Array{HashpipeDatabuf,0}
-    block::Vector{HeraCatcherIbvpktBlock}
-end
-
-function HeraCatcherIbvpktDatabuf(p::Ptr{Nothing})
-    header = unsafe_wrap(Array, Ptr{HashpipeDatabuf}(p), ())
-    p += HASHPIPE_IBVPKT_DATABUF_ALIGNMENT_SIZE # 4096
-    n_block = header[].n_block
-    block_size = header[].block_size
-    block = Vector{HeraCatcherIbvpktBlock}(undef, n_block)
-    for i in 1:n_block
-        block[i] = HeraCatcherIbvpktBlock(p, block_size)
-        p += block_size
-    end
-
-    HeraCatcherIbvpktDatabuf(header, block)
-end
-
-function HeraCatcherIbvpktDatabuf(instance_id::Integer, databuf::Integer;
-                                  keyfile=hashpipe_keyfile(), readonly=true)
-    key = hashpipe_databuf_key(instance_id, databuf; keyfile)
-    p = shmat(ShmId(key), readonly)
-    HeraCatcherIbvpktDatabuf(p)
-end
-
-function Base.sizeof(h::HeraCatcherIbvpktDatabuf)
-    pad(sizeof(h.header), CACHE_ALIGNMENT) +
-    h.header[].n_block * h.header[].block_size
-end
-
-function Base.show(io::IO, h::HeraCatcherIbvpktDatabuf)
-    shmid = h.header[].shmid
-    nblks = h.header[].n_block
-    blksz = h.header[].block_size
-    print(io, "HeraCatcherIbvpktDatabuf")
-    print(io, shmid)
-    print(io, "(")
-    print(io, nblks)
-    print(io, " blocks, ")
-    print(io, blksz)
-    print(io, " bytes each, ")
-    print(io, sizeof(h))
-    print(io, " bytes total)")
 end

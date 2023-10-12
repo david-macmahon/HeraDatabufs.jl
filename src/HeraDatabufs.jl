@@ -1,12 +1,21 @@
 module HeraDatabufs
 
-using InterProcessCommunication
+using HashpipeDatabufs
 
-export hashpipe_databuf_key
-export HeraCatcherIbvpktDatabuf
-export HeraCatcherBdaInputDatabuf
+export HeraCatcherIbvpktBlock
+export HeraCatcherBdaInputBlock
+
+# Re-export the module
+export HashpipeDatabufs
+# Re-export the struct
+export HashpipeDatabuf
+# Re-export functions
+export get_block_states
+export get_block_states!
+export states_to_bitmask
 
 const NET_HEADER_SIZE = 42
+const FENG_PAYLOAD_SIZE = 4608
 const BYTES_PER_PACKET = 4096
 const HASHPIPE_IBVPKT_DATABUF_ALIGNMENT_SIZE = 4096
 
@@ -28,7 +37,6 @@ function pad(sz, n)
     cld(sz, n) * n
 end
 
-include("hashpipe.jl")
 include("catcher_ibvpkt.jl")
 include("catcher_bda_input.jl")
 
