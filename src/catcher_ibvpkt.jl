@@ -21,7 +21,7 @@ function Base.show(io::IO, hcah::HeraCatcherAppHeader)
     print(io, ", ant1=");        print(io, hcah.ant1        |>bswap)
     print(io, ", xeng_id=");     print(io, hcah.xeng_id     |>bswap)
     print(io, ", payload_len="); print(io, hcah.payload_len |>bswap)
-    print(")")
+    print(io, ")")
 end
 
 ###
