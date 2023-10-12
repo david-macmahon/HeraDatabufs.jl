@@ -3,6 +3,7 @@ module HeraDatabufs
 using HashpipeDatabufs
 
 export HeraCatcherIbvpktBlock
+export HeraIbvpktBlock
 export HeraCatcherBdaInputBlock
 
 # Re-export the module
@@ -37,6 +38,7 @@ function pad(sz, n)
     cld(sz, n) * n
 end
 
+include("hera_ibvpkt.jl")
 include("catcher_ibvpkt.jl")
 include("catcher_bda_input.jl")
 
