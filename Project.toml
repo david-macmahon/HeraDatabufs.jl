@@ -1,7 +1,7 @@
 name = "HeraDatabufs"
 uuid = "ef009080-a24c-4b23-8ca3-274646513aa7"
 authors = ["David MacMahon <davidm@astro.berkeley.edu>"]
-version = "0.0.0"
+version = "0.0.1"
 
 [deps]
 HashpipeDatabufs = "6e2f7c64-92ce-42bb-83af-8f0e5f56b763"
