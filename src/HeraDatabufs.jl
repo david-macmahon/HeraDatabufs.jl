@@ -1,8 +1,9 @@
 module HeraDatabufs
 
 using HashpipeDatabufs
+using Sockets: IPv4
 
-export HeraCatcherIbvpktBlock
+export HeraCatcherIbvpktBlock, netheader, appheader, header
 export HeraIbvpktBlock
 export HeraCatcherBdaInputBlock
 

@@ -5,3 +5,4 @@ version = "0.0.0"
 
 [deps]
 HashpipeDatabufs = "6e2f7c64-92ce-42bb-83af-8f0e5f56b763"
+Sockets = "6462fe0b-24de-5631-8697-dd941f90decc"

@@ -52,6 +52,27 @@ function Base.sizeof(::Type{HeraCatcherIbvpktPacket})
     pad(BYTES_PER_PACKET, AVX512_ALIGNMENT)
 end
 
+function netheader(hcip::HeraCatcherIbvpktPacket)
+    nh = hcip.netheader
+    dmac = join(bytes2hex.(nh[1:6]), ":")
+    smac = join(bytes2hex.(nh[7:12]), ":")
+    sip = reinterpret(UInt32, nh[27:30])[1] |> bswap |> IPv4
+    dip = reinterpret(UInt32, nh[31:34])[1] |> bswap |> IPv4
+    (; dmac, smac, sip, dip)
+end
+
+function appheader(hcip::HeraCatcherIbvpktPacket)
+    hcah = hcip.appheader[]
+
+    NamedTuple(
+        f=>bswap(getfield(hcah, f)) for f in fieldnames(HeraCatcherAppHeader)
+    )
+end
+
+function header(hcip::HeraCatcherIbvpktPacket)
+    (; netheader(hcip)..., appheader(hcip)...)
+end
+
 ###
 ###  HeraCatcherIbvpktBlock
 ###
